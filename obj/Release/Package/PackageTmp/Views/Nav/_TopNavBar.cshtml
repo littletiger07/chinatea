@@ -1,0 +1,119 @@
+﻿@model IEnumerable<ChinaTea.Entities.ProductCategory>
+@{
+    string formTarget;
+    string controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    if (controllerName=="Order" || controllerName=="ProductCategory")
+    {
+        formTarget = controllerName;
+    }
+    else
+    {
+        formTarget = "Product";
+    }
+    
+}
+<ul class="nav navbar-nav">
+        @if (User.IsInRole("Administrators"))
+        {
+
+            <li>@Html.ActionLink("Home", "Home", new { controller = "home", area = "" })</li><li class="dropdown">
+            <a href="#" class="dropdown-toggle text-success" data-toggle="dropdown">Account<b class="caret"></b></a>
+            <ul class="dropdown-menu text-primary">
+                <li>@Html.ActionLink("Search Users", "searchUsers", new {controller="AdminAccount", area="Admin"})</li>
+                <li>@Html.ActionLink("All Users", "searchUsers", new { controller = "AdminAccount", area = "Admin",searchText="All" })</li>
+                <li>@Html.ActionLink("Search Roles", "searchRoles", new {controller="AdminAccount", area="Admin"})</li>
+                <li>@Html.ActionLink("All Roles", "searchRoles", new { controller = "AdminAccount", area = "Admin" ,searchText="All"})</li>
+                <li>@Html.ActionLink("Add Role", "CreateRole", new { controller = "AdminAccount", area = "Admin" })</li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle text-success" data-toggle="dropdown">Product<b class="caret"></b></a>
+            <ul class="dropdown-menu text-primary">
+                <li>@Html.ActionLink("All products", "Index", new {controller="Product",Area = "Admin" })</li>
+            
+                <li>@Html.ActionLink("Add products", "Add", new { controller = "Product", area = "Admin" })</li>
+            </ul>
+        </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle text-success" data-toggle="dropdown">Category<b class="caret"></b></a>
+        <ul class="dropdown-menu text-primary">
+            <li>@Html.ActionLink("All Categories", "Index", new { controller="ProductCategory",Area = "Admin" })</li>
+            @*<li>@Html.ActionLink("Search Categories", "Search", new { controller = "ProductCategory", area = "Admin" })</li>*@
+            <li>@Html.ActionLink("Add products", "Add", new { controller = "ProductCategory", area = "Admin" })</li>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle text-success" data-toggle="dropdown">Order<b class="caret"></b></a>
+        <ul class="dropdown-menu text-primary">
+            <li>@Html.ActionLink("All orders", "Index", new { controller="Order", area = "Admin" })</li>
+            @*<li>@Html.ActionLink("Search Orders", "Search", new { controller = "Order", area = "Admin" })</li>*@
+            <li>@Html.ActionLink("Add Order", "Add", new { controller = "Order", area = "Admin" })</li>
+        </ul>
+    </li>
+    }
+    else
+    {
+        <li>@Html.ActionLink("Home", "Home", new { controller = "home", area = "" })</li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle text-success" data-toggle="dropdown">Introduction<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Chinese Tea", "Home", new { controller = "Home", area = "" }, new { @class = "text-success" })</li>
+
+                <li class="divider"></li>
+                @foreach (var category in Model)
+                {
+                    <li>@Html.ActionLink(@category.ProductCategoryName, "Category", new { controller = "Home", area = "", id = category.Id }, new { @class = "text-primary" })</li>
+                }
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle text-success" data-toggle="dropdown">Products<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li>@Html.ActionLink("All Products", "ShowProducts", new { controller = "Home", area = "" }, new { @class="text-success"})</li>
+               
+                <li class="divider"></li>
+                @foreach (var category in Model)
+                {
+                   <li>@Html.ActionLink(@category.ProductCategoryName, "ShowProducts", new { controller = "Home", area = "", categories = category.Id }, new { @class="text-primary"})</li>
+               }
+            </ul>
+        </li>
+       
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">MyAccount<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Dashboard", "Index", "Manage")</li>
+            <li>@Html.ActionLink("Edit Profile", "EditProfile", "Manage")</li>
+            <li>@Html.ActionLink("Order History", "OrderHistory", "Manage")</li>
+            <li>@Html.ActionLink("ChangePassword", "ChangePassword", "Manage")</li>
+            <li>@Html.ActionLink("Manage Addresses", "ShowAddresses", "Manage")</li>
+        </ul>
+    </li>
+    }
+    
+  
+        
+</ul>
+@if (!User.IsInRole("Administrators"))
+{
+    using (Html.BeginForm("ShowProducts", "Home",new { area=""}, FormMethod.Get, new { @class = "navbar-form navbar-left", role = "search" }))
+    {
+        <div class="form-group">
+            @Html.TextBox("searchtext", "", new { @id = "searchtext", @class = "form-control input-sm", placeholder = "Search Products" })
+       
+        </div>
+        <button type="submit" class="btn btn-default btn-xs">GO</button>
+    }
+}
+else
+{
+    using (Html.BeginForm("Index", @formTarget, new { area = "admin" }, FormMethod.Get, new { @class = "navbar-form navbar-left", role = "search" }))
+    {
+        <div class="form-group">
+            @Html.TextBox("searchtext", "", new { @id = "searchtext", @class = "form-control input-sm", placeholder = "Search "+formTarget })
+
+        </div>
+        <button type="submit" class="btn btn-default btn-xs">GO</button>
+    }
+}
+

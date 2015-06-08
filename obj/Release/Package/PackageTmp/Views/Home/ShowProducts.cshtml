@@ -1,0 +1,116 @@
+﻿@using ChinaTea.Extensions
+@model ChinaTea.Models.ProductsViewModel
+@{
+    ViewBag.Title = "ShowProducts";
+}
+<script>
+    $(document).ready(function () {
+        var form = $("form[name=filters]");
+        form.find("input[type=checkbox]").change(function () {
+            form.submit();
+
+        });
+        $("select[name='orderby']").change(function () {
+            form.submit();
+        });
+        $("#clearcategoryfilter").click(function () {
+            checkboxes = $("[name=categories]");
+            for (i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = false;
+            }
+            form.submit();
+        });
+        $("#clearpricerangefilter").click(function () {
+            checkboxes = document.getElementsByName("pricefilter");
+            for (i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = false;
+            }
+            form.submit();
+        })
+    })
+</script>
+<div class="page-header">
+    <ol class="breadcrumb">
+            <li>@Html.ActionLink("Home", "Home", new { controller = "Home", area = "" })</li>
+            <li>@Html.ActionLink("Products", "ShowProducts", new { Controller = "Home", area = "" })</li>
+            <li>Selected Products</li>
+    </ol>
+    <h2>Selected Products</h2>
+</div>
+<div class="col-md-2 ">
+    @using (Html.BeginForm(null, null, FormMethod.Get, new { name = "filters" }))
+    {
+        <div class="form-group">
+            <input type="hidden" name="searchtext" value="@ViewBag.searchtext" />
+            <label class="text-success">Sort By</label>
+            <select name="orderby" id="orderby">
+                <option value="0" selected=@(Model.Orderby == 0) class="text-primary">
+                    Catalog No.
+                </option>
+                <option value="1" selected=@(Model.Orderby == 1) class="text-primary">
+                    Name
+                </option>
+                <option value="2" selected=@(Model.Orderby == 2) class="text-primary">
+                    Price low to high
+                </option>
+                <option value="3" selected=@(Model.Orderby == 3) class="text-primary">
+                    Price high to low
+                </option>
+            </select>
+        </div>
+    <div class="form-group">
+        <label class="text-success">Categories</label> <a href="#" class="text-danger pull-right" id="clearcategoryfilter">x clear all</a><br/>
+
+        @foreach (var category in Model.Categories)
+        {
+
+        <input type="checkbox" name="categories" value="@category.Id" checked=@(Array.Exists(Model.SelectedCategories,e=>e==category.Id)) disabled=@(Model.ProductsCountByCategory[category.Id]==0) /><label class="text-primary">@category.ProductCategoryName</label><label class="pull-right @(Model.ProductsCountByCategory[category.Id]==0?"text-danger":"text-success")"> (@Model.ProductsCountByCategory[category.Id])</label><br />
+
+
+        }
+        <div class="form-group">
+            <label class="text-success">Price Range </label><a href="#" class="text-danger pull-right" id="clearpricerangefilter">x clear all</a><br />
+            <input type="checkbox" name="pricefilter" checked=@(Array.Exists(Model.SelectedPriceFilters, e => e == 0)) disabled=@(Model.ProductscountByPriceRange[0]==0) value="0" /><label class="text-primary"> 0-$50 </label><label class="@(Model.ProductscountByPriceRange[0]==0?"text-danger":"text-success") pull-right"> (@Model.ProductscountByPriceRange[0])</label><br />
+            <input type="checkbox" name="pricefilter" checked=@(Array.Exists(Model.SelectedPriceFilters, e => e == 1)) disabled=@(Model.ProductscountByPriceRange[1]==0) value="1" /><label class="text-primary">$50-$100 </label><label class="@(Model.ProductscountByPriceRange[1] == 0 ? "text-danger" : "text-success") pull-right"> (@Model.ProductscountByPriceRange[1])</label><br />
+            <input type="checkbox" name="pricefilter" checked=@(Array.Exists(Model.SelectedPriceFilters, e => e == 2)) disabled=@(Model.ProductscountByPriceRange[2]==0) value="2" /><label class="text-primary"> $100-$200 </label><label class="@(Model.ProductscountByPriceRange[2] == 0 ? "text-danger" : "text-success") pull-right">(@Model.ProductscountByPriceRange[2])</label><br />
+            <input type="checkbox" name="pricefilter" checked=@(Array.Exists(Model.SelectedPriceFilters, e => e == 3)) disabled=@(Model.ProductscountByPriceRange[3]==0) value="3" /><label class="text-primary"> >$200 </label><label class="@(Model.ProductscountByPriceRange[3] == 0 ? "text-danger" : "text-success") pull-right">(@Model.ProductscountByPriceRange[3])</label><br />
+        </div>
+     </div> 
+    }
+        
+</div>
+<div class=" col-md-10 panel">
+    <div class="panel-heading text-primary text-center @(ViewBag.searchtext==null || ViewBag.searchtext==string.Empty?"hide":"")">Showing search result from "@ViewBag.searchtext" @Html.ActionLink("Show All Products", "ShowProducts", new { controller = "home", area = "" }, new {@class="btn btn-success btn-xs" })</div>
+    @foreach (var product in Model.Products)
+    {
+        <div class="col-md-4">
+            
+                <div class="panel-heading text-success">@product.CatalogNumber: @product.ProductName</div>
+                <a href="/home/productdetails/@product.Id"><img src="@product.PicPathThumbnail" height="200" width="200"></a>
+                <div class="col-md-10">
+                    <label class="text-primary pull-left">Price: $@product.ProductUnitPrice/@(product.ProductPackageSize==1m?"":product.ProductPackageSize.ToString())@product.PackageUnit</label>
+                </div><br />
+                <div class="form-group col-md-10">
+                @using (Html.BeginForm("AddToCart", "ShoppingCart", new { id = @product.Id, area = "" }))
+                {
+                    <label class="text-primary pull-left">Quantity:@Html.SelectQuantities("quantity", 20)</label>
+                    @Html.Hidden("ReturnUrl",Request.Url.PathAndQuery)
+                    <button type="submit" disabled=@(product.Stock==0) class="btn btn-primary btn-xs">Add to Cart</button>
+                }
+                </div>
+            <div class="col-md-10 panel-heading text-center text-danger @(product.Stock>0?"hide":"")">Out of Stock</div>
+            <div class="col-md-10 panel-heading text-center text-primary @(product.Stock<=0||product.Stock>=5?"hide":"")">Low in Stock</div>
+            <div class="col-md-10 panel-heading text-center text-success @(product.Stock<5?"hide":"")">In Stock</div>
+            
+        </div>
+
+    }
+    <br/>
+
+    @if (Model.PageInfo.PageCount > 1)
+    {
+        <div>
+            @Html.Pagination(Model.PageInfo)
+        </div>
+    }
+</div>

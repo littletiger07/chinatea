@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Home";
+}
+
+<div >
+    
+        @Html.Action("ProductCategoryNavBar", "Nav", new { currentCategory = ViewBag.currentCategory })
+    
+    <div class="panel col-md-9 col-sm-9">
+        <div class="panel-heading text-success text-">
+            <h2>Chinese Tea</h2>
+        </div>
+        <div class="panel-body text-primary">
+            <p>Chinese people are believed to have enjoyed tea drinking for more than 4,000 years. 
+            Legend has it that Yan Di, one of three rulers in ancient times, tasted all kinds of herbs to find medical cures. 
+            One day,as he was being poisoned by some herb he had ingested; a drop of water from a tea tree dripped into his mouth
+             and he was saved. For a long time, tea was used as an herbal medicine. During the Western Zhou Dynasty, 
+            it was a religious offering. During the Spring and Autumn Period, people ate fresh tea leaves as vegetables. 
+            With the popularization of Buddhism from the Three Kingdoms to the Northern and Southern Dynasties, 
+            its refreshing effect made it a favorite among monks in Za-Zen meditation.</p>
+            <div class="col-md-6">
+                <img class="img-responsive" src="~/img/chinese-tea-garden.jpg" alt="Tea Garden" />
+                <label class="text-primary">Tea Garden</label>
+            </div>
+            <div class="col-md-6">
+                <img class="img-responsive" src="~/img/fresh-tea-leave.jpg" alt="Fresh Tea Leaves" />
+                <label class="text-primary">Fresh Tea Leave</label>
+            </div>
+            <p>Tea as a drink prospered during the Tang Dynasty, and tea shops became popular. A major event of this time was the completion 
+            of Tea Classics, the cornerstone of Chinese tea culture, by Lu Yu, Tea Sage of China. This little book details rules concerning 
+            various aspects of tea, such as growth areas for tea trees, wares and skills for processing and tasting of tea, the history of 
+            Chinese tea and quotations from other records, comments on tea from various places, and notes on what occasions tea wares should be 
+            complete and when some wares could be omitted.</p>
+            <div class="col-md-6">
+                <img class="img-responsive" src="~/img/tea-ware.jpg" alt="Tea Ware" />
+                <label class="text-primary">Tea Ware</label>
+            </div>
+            <div class="col-md-6">
+                <img class="img-responsive" src="~/img/tea-set.jpg" alt="Tea Set" />
+                <label class="text-primary">Tea Set</label>
+            </div>
+            <p>During the Tang Dynasty, a Japanese monk brought tea seeds from Zhejiang Province to Japan. Later in the Southern Song Dynasty, 
+            Zen masters brought tea procedures and wares from China to Japan, promoting the initiation of the Japanese tea ceremony. In the Song
+            Dynasty, Arabic merchants exported tea from Quanzhou, Fujian Province. In the Ming Dynasty, tea was sold to Southeast Asian and South 
+            1African countries. In 1610 it went to Europe via Macau in a Dutch merchant ship. Thus it became an international drink.</p>
+        </div>
+        @Html.ActionLink("Show All Products", "ShowProducts", new { controller = "Home", area = "" }, new { @class = "btn btn-success pull-right" })
+    </div>
+</div>
+

@@ -1,0 +1,10 @@
+﻿<div class="col-md-2 panel panel-primary">
+    <div class="panel-heading">My Account</div>
+    <ul class="nav nav-pills nav-stacked">
+        <li class="@(ViewBag.currentTab=="DashBoard"?" active":"")">@Html.ActionLink("DashBoard", "Index", new { controller = "Manage", area = "" }, new { @class = "icon-chevron-right" })</li>
+        <li class="@(ViewBag.currentTab == "OrderHistory" ? "active" : "")" >@Html.ActionLink("Order History", "OrderHistory", new { controller = "Manage", area = "" }, new { @class = "icon-chevron-right"})</li>
+        <li class="@(ViewBag.currentTab=="EditProfile"?"active":"")">@Html.ActionLink("Edit Profile", "EditProfile", new { controller = "Manage", area = "" }, new { @class = "icon-chevron-right"})</li>
+        <li class="@(ViewBag.currentTab=="ChangePassword"?"active":"")">@Html.ActionLink("Change Password", "ChangePassword", new { controller = "Manage", area = "" }, new { @class = "icon-chevron-right" })</li>
+        <li class="@(ViewBag.currentTab=="ShowAddresses"?"active":"")">@Html.ActionLink("Manage Addresses", "ShowAddresses", new { controller = "Manage", area = "" }, new { @class = "icon-chevron-right"  })</li>
+    </ul>
+</div>

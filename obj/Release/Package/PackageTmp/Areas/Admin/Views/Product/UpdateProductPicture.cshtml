@@ -1,0 +1,57 @@
+﻿@model ChinaTea.Areas.Admin.Models.UpdateProductPicture
+@{
+    //ViewBag.Title = "UpdateProductPicture";
+
+}
+
+<h2>UpdateProductPicture</h2>
+<dd>
+    <img src="@Url.Content("~/img/"+@Model.PicPathDeatil)" alt="@Model.ProductName"  />
+</dd>
+
+@using (Html.BeginForm("UpdateProductPicture", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m=>m.Id)
+        @Html.HiddenFor(m=>m.ProductName)
+        <div class="form-group">
+            <label class="control-label col-md-2" for="PicPathThumbnail">Thumbnail pic name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PicPathThumbnail, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="PicThumbnail">Thumbnail picture</label>
+            <div class="col-md-10">
+                <input type="file" name="PicThumbnail" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="PicPathDeatil">PicPathDeatil</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PicPathDeatil, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="PicDetail">Detail picture</label>
+            <div class="col-md-10">
+                <input type="file" name="PicDetail" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+

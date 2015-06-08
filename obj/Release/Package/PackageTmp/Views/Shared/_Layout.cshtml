@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @if (IsSectionDefined("scripts"))
+        {
+        @RenderSection("scripts")
+        }
+    @if (IsSectionDefined("AddToHead"))
+        {
+        @RenderSection("AddToHead", required: false)
+        }
+    <link rel="shortcut icon icon" href="" />
+    @*<script>
+    $(document).ready(function () {
+        $("#tgy").click(function () {
+            $.post("Home/About", {}, function () {
+               // alert("ffff");
+            }
+                );
+
+
+        });
+    });
+
+    </script>*@
+</head>
+<body class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("ChinaTea", "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @Html.Action("GenerateTopNavBar", "Nav", new { Area = "" })
+               
+                @Html.Action("LoginPartial", new { controller="Nav", area=""})
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container body-content">
+        <div class="panel-heading text-center text-danger">
+            @if(TempData["Message"]!=null)
+            {
+                <h2>@TempData["Message"]</h2>
+            }
+        </div> 
+        @RenderBody()
+        <hr />
+  
+    </div><hr />
+    <footer class="row">
+      
+        <div class="panel-footer text-center">
+            <p>
+                Copyright (C) 2014 All Rights Reserved. Tea online store management system
+                Service time：Monday to Sunday 08:30 — 20:00  Tel：2-014-925-0004
+            </p>
+        </div>
+       
+
+    </footer>
+
+</body>
+</html>
+
+

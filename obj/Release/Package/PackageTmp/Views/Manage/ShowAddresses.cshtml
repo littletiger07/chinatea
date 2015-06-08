@@ -1,0 +1,53 @@
+﻿@model System.Collections.Generic.List<ChinaTea.Entities.CustomerAddress>
+@{
+    ViewBag.Title = "ShowAddresses";
+}
+
+
+@Html.Action("MyAccountNavBar", new { controller="Nav", area="",currentTab="ShowAddresses"})
+<div class="col-md-10 panel">
+    @if(Model.Count()==0)
+    {
+        <div class="panel-headering">You have no address in file</div><br />
+        @Html.ActionLink("New Address", "CreateAddress", new { controller = "manage", area = "",returnUrl=Request.Url }, new { @class="btn btn-primary "})
+    }
+    else
+    {
+        <div class="panel-headering text-center text-primary">
+            Manage Addresses<br/>
+        </div>
+        <table>
+        @for(int i=0; i<=(Model.Count()/3);i++)
+        {
+            <tr>
+                @for(int j=0; j<=2;j++)
+                {
+                    <td class="col-md-2 col-md-offset-1" >
+                        @if ((i * 3 + j ) < @Model.Count())
+                        {
+                            ChinaTea.Entities.CustomerAddress address = @Model[i * 3 + j ];
+                            <label>@address.FirstName @address.LastName</label><br/>
+                            <label>@address.AddressFirstLine</label><br />
+                            if(address.AddressSecondLine!=null)
+                            {
+                                <label>@address.AddressSecondLine</label><br/>
+                            }
+                            <label>@address.AddressCity</label><br />
+                            <label>@address.AddressState @address.AddressZipCode</label><br/>
+                            <label>@address.AddressCountry</label>
+                            using (Html.BeginForm("DeleteAddress", "Manage", new {id=@address.Id,area=""}))
+                            {
+                                @Html.ActionLink("Edit","EditAddress", new {controller="Manage",area="",id=@address.Id}, new {@class="btn btn-primary btn-xs"})
+                                <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                            }
+                             
+
+                        }
+                    </td>
+                }
+            </tr>
+        }
+        </table>
+        @Html.ActionLink("Add Address", "CreateAddress", new { controller = "Manage", area = "" }, new { @class="btn btn-primary btn-xs"})
+    }
+</div>

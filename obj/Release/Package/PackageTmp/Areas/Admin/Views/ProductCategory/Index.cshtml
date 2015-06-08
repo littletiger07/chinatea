@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ChinaTea.Entities.ProductCategory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Add")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductCategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductCategoryDescription)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductCategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductCategoryDescription)
+        </td>
+        <td>
+            @using (Html.BeginForm("delete", "ProductCategory",new {id=item.Id}))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ActionLink("Edit", "EditProductCategory", new { controller="ProductCategory",area="admin",id = item.Id }, new { @class = "btn btn-primary btn-xs" }) 
+                @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+                <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                }
+        </td>
+    </tr>
+}
+
+</table>
+@Html.ActionLink("Create", "Add", new { @class="btn btn-primary btn-xs"})

@@ -1,0 +1,9 @@
+<publishData>
+  <publishProfile
+    publishUrl="https://liangtang-001-site1.smarterasp.net:8172/msdeploy.axd"
+    msdeploySite="liangtang-001-subsite3"
+    destinationAppUrl="http://liangtang-001-site1.smarterasp.net/"
+    profileName="Default Settings"
+    publishMethod="MSDeploy"
+    userName="ifc\liangtang-001" />
+</publishData>

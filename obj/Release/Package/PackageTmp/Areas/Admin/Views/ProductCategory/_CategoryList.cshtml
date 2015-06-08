@@ -1,0 +1,8 @@
+﻿@model IEnumerable<ChinaTea.Entities.ProductCategory>
+<select name="ProductCategoryId" >
+    @foreach (var category in Model)
+    {
+        <option value="@category.Id" selected="@(category.Id==ViewBag.selectedId)">@category.ProductCategoryName</option>
+    }
+</select>
+

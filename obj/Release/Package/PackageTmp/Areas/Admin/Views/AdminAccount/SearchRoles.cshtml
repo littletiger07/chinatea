@@ -1,0 +1,43 @@
+﻿@model System.Collections.Generic.List<ChinaTea.Models.ApplicationRole>
+@{
+    ViewBag.Title = "SearchRoles";
+}
+@section AddToHead{
+    <link href="~/Content/css/showitems.css" rel="stylesheet" />
+}
+
+@if (Model == null)
+{
+    using (Html.BeginForm())
+    {
+        <label>Please enter search text:</label><br />
+        @Html.TextBox("searchText")<br />
+        <button type="submit" class="btn btn-primary btn-xs">Search</button>
+        @Html.ActionLink("View All", "searchroles", null, new { searchtext = "All" }, new { @class = "btn btn-primary btn-xs" })
+    }
+}
+else
+{
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>Role Name</th>
+            <th></th>
+        </tr>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Id</td>
+                <td>@role.Name</td>
+                <td>
+                    @using (Html.BeginForm("DeleteRole", "AdminAccount", new { id = role.Id }))
+                    {
+                        @Html.ActionLink("Edit", "EditRole", new { id = role.Id }, new { @class = "btn btn-primary btn-xs" })
+                        <button class="btn btn-danger btn-xs" type="submit">Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.ActionLink("Create ", "CreateRole", null, new { @class = "btn btn-primary" })
+}

@@ -1,0 +1,50 @@
+﻿@using ChinaTea.Extensions
+@model ChinaTea.Entities.Product
+
+@{
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li>@Html.ActionLink("Home", "Home", new { controller = "Home", area = "" })</li>
+        <li>@Html.ActionLink("Products", "ShowProducts", new { Controller = "Home", area = "" })</li>
+        <li>Product Details</li>
+    </ol>
+    <h2 class="text-success">@Model.ProductName </h2>
+</div>
+
+<div>
+    
+    <dl class="text-primary dl-horizontal">
+        <dt>Product Name: </dt>
+        <dd>@Model.ProductName</dd>
+        <dt>Unit Price</dt>
+        <dd>$@Model.ProductUnitPrice</dd>
+        <dt>Package Size:</dt>
+        <dd>@(Model.ProductPackageSize)@Model.PackageUnit</dd>
+        <dt>Product Category:</dt>
+        <dd>@Model.ProductCategory.ProductCategoryName</dd>
+        <dt>Description:</dt>
+        <dd>@Model.ProductDescription</dd>
+    </dl>
+    <img src="@Model.PicPathDeatil" alt="@Model.ProductName" height="400" width="400" />
+
+       
+       
+</div>
+@using (Html.BeginForm("AddToCart", "ShoppingCart", new { id = Model.Id, area = "" }))
+{
+    <label>Quantity:@Html.SelectQuantities("quantity", 20)</label>
+    @Html.Hidden("ReturnUrl", Request.Url.PathAndQuery)
+    <button type="submit" class="btn btn-primary btn-xs">Add to Cart</button>
+}
+<br/>
+<div class="panel">
+    <div class="panel-heading text-success">
+        <p>Product Category: @Model.ProductCategory.ProductCategoryName</p>
+    </div>
+    <div class="panel-body text-primary">
+        <p>@Model.ProductCategory.ProductCategoryDescription</p>
+    </div>
+</div>
+<a href="@ViewBag.returnUrl" class="btn btn-success">Back to List</a>

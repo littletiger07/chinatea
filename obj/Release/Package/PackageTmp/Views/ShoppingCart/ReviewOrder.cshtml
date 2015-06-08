@@ -1,0 +1,124 @@
+﻿@model ChinaTea.Models.ReviewOrderViewModel
+
+@{
+    ViewBag.Title = "ReviewOrder";
+ } 
+
+
+<div class="panel text-primary">
+    <div class="panel-heading text-center text-Primary">
+        <h2>Your Order Summary</h2>
+    </div>
+    <div class="panel col-md-10 col-md-offset-1">
+        <div class="panel-heading text-parimary">
+            <h3>Items Ordered:</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <tr>
+                    <th>Item</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+                @foreach (var item in Model.MyCarts)
+                {
+                    <tr>
+                        <td>@item.Product.CatalogNumber</td>
+                        <td>@item.Product.ProductName</td>
+                        <td>@item.Count</td>
+                        <td>@item.Product.ProductUnitPrice</td>
+                        <td>@item.Count*@item.Product.ProductUnitPrice</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="4" class="text-center text-Primary">Grand Total</td>
+                    <td>@Model.MyCarts.Sum(p=>p.Count*p.Product.ProductUnitPrice)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="col-md-4 col-md-offset-1">
+            <div class="panel-heading text-center text-Primary">
+                <h3>Billing Address</h3>
+            </div>
+            <div class="panel-body text-center">
+                <span>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</span><br />
+                <span>@Model.BillingAddress.AddressFirstLine</span><br />
+                @if(Model.BillingAddress.AddressSecondLine!=null)
+                {
+                    <span>@Model.BillingAddress.AddressSecondLine</span><br />
+                }
+                <span>@Model.BillingAddress.AddressCity @Model.BillingAddress.AddressState @Model.BillingAddress.AddressZipCode</span><br />
+                <span>@Model.BillingAddress.AddressCountry</span><br />
+            </div>
+        </div>
+        <div class="col-md-4 col-md-offset-1">
+            <div class="panel-heading text-center text-Primary">
+                <h3>Shipping Address</h3>
+            </div>
+            <div class="panel-body text-center">
+                <span>@Model.ShippingAddress.FirstName @Model.ShippingAddress.LastName</span><br />
+                <span>@Model.ShippingAddress.AddressFirstLine</span><br/>
+                @if (Model.ShippingAddress.AddressSecondLine != null)
+                {
+                    <span>@Model.ShippingAddress.AddressSecondLine</span><br />
+                }
+                <span>@Model.ShippingAddress.AddressCity @Model.ShippingAddress.AddressState @Model.ShippingAddress.AddressZipCode</span><br />
+                <span>@Model.ShippingAddress.AddressCountry</span><br />
+            </div>
+        </div>
+        <div class="panel col-md-10 col-md-offset-1">
+            <div class="panel-heading">
+                <h3>Payment Information</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreditCardInfo.Name)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreditCardInfo.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreditCardInfo.CreditCardNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreditCardInfo.CreditCardNumber)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreditCardInfo.ExpiredDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreditCardInfo.ExpiredDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreditCardInfo.SecurityCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreditCardInfo.SecurityCode)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @using (Html.BeginForm("PlaceOrder","ShoppingCart"))
+        { 
+            <div class="col-md-offset-4 col-md-4">
+
+                @Html.ActionLink("Revise Order", "CheckoutStep3",null, new { @class="btn btn-danger "})
+
+                <input type="submit" name="BtnNext" value="Place Order" class="btn btn-success " />
+
+            </div>
+        }
+    </div>
+</div>
+
