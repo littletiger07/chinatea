@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "CartEmpty";
+}
+
+<div class="panel panel-heading text-danger">
+    <h1>Your Cart Is Empty!</h1>
+</div>
+<div class="form-control">
+    <div class="form-group">
+        @Html.ActionLink("Continue Shopping", "ShowProducts", new { controller = "Home", area = "" }, new { @class="btn btn-primary"})
+    </div>
+</div>
+

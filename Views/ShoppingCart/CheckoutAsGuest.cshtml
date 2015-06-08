@@ -1,0 +1,232 @@
+﻿@model ChinaTea.Models.CheckoutAsGuest
+
+@{
+    ViewBag.Title = "CheckoutAsGuest";
+}
+<script>
+    $(document).ready(function () {
+        $('#UseBillingAddress').change(function () {
+            if (this.checked) {
+                copyAddress();
+                disableShippingAddress();
+            }
+            else {
+                enableShippingAddress();
+            }
+        });
+        $('#submitform').click(function () {
+            if ($('#UseBillingAddress').get(0).checked) {
+                alert("check");
+                enableShippingAddress();
+                copyAddress();
+            }
+       
+            $('form').submit();
+        })
+
+    })
+
+    function copyAddress() {
+        $('#ShippingAddress_FirstName').val($('#BillingAddress_FirstName').val());
+        $('#ShippingAddress_LastName').val($('#BillingAddress_LastName').val());
+        $('#ShippingAddress_AddressFirstLine').val($('#BillingAddress_AddressFirstLine').val());
+        $('#ShippingAddress_AddressSecondLine').val($('#BillingAddress_AddressSecondLine').val());
+        $('#ShippingAddress_AddressCity').val($('#BillingAddress_AddressCity').val());
+        $('#ShippingAddress_AddressState').val($('#BillingAddress_AddressState').val());
+        $('#ShippingAddress_AddressCountry').val($('#BillingAddress_AddressCountry').val());
+    }
+    function disableShippingAddress() {
+        $('#ShippingAddress input').attr("readonly", "readonly");
+    }
+
+    function enableShippingAddress() {
+        $('#ShippingAddress input').removeAttr("readonly", "readonly");
+    }
+</script>
+<h2>CheckoutAsGuest</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal text-primary">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">            
+            @Html.LabelFor(model => model.UserEmail,  htmlAttributes : new { @class="control-label col-md-2"} )
+            <div class="col-md-10">
+                @Html.EditorFor(model=>model.UserEmail,new {htmlAttributes=new{@class="form-control"}})
+            </div>
+        </div>
+
+        <div id="BillingAddress" class="panel">
+            <div class="panel-heading text-success">
+                <h2>Please Enter Billing Address</h2>
+            </div>
+          
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BillingAddress.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BillingAddress.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BillingAddress.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BillingAddress.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BillingAddress.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BillingAddress.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BillingAddress.AddressFirstLine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BillingAddress.AddressFirstLine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BillingAddress.AddressFirstLine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BillingAddress.AddressSecondLine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BillingAddress.AddressSecondLine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BillingAddress.AddressSecondLine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BillingAddress.AddressCity, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BillingAddress.AddressCity, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BillingAddress.AddressCity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BillingAddress.AddressState, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BillingAddress.AddressState, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BillingAddress.AddressState, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BillingAddress.AddressCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BillingAddress.AddressCountry, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BillingAddress.AddressCountry, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="panel text-primary" id="ShippingAddress">
+            <div class="panel-heading text-success">
+                <h2>Please Enter Shipping Address</h2>
+            </div>
+            <div class="panel-heading text-primary">
+                <label class="control-label">Check to Use Billing Address </label><input type="checkbox" id="UseBillingAddress" name="UseBillingAddress" value="checked" />
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShippingAddress.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+               
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShippingAddress.FirstName, new { htmlAttributes = new { @class = "form-control" } })                    
+                    @Html.ValidationMessageFor(model => model.ShippingAddress.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShippingAddress.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShippingAddress.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShippingAddress.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShippingAddress.AddressFirstLine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShippingAddress.AddressFirstLine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShippingAddress.AddressFirstLine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShippingAddress.AddressSecondLine, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShippingAddress.AddressSecondLine, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShippingAddress.AddressSecondLine, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShippingAddress.AddressCity, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShippingAddress.AddressCity, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShippingAddress.AddressCity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShippingAddress.AddressState, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShippingAddress.AddressState, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShippingAddress.AddressState, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShippingAddress.AddressCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShippingAddress.AddressCountry, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShippingAddress.AddressCountry, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading text-success">
+                <h2>Please Enter Your Payment:</h2>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Payment.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Payment.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Payment.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Payment.CreditCardNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Payment.CreditCardNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Payment.CreditCardNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Payment.ExpiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Payment.ExpiredDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Payment.ExpiredDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Payment.SecurityCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Payment.SecurityCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Payment.SecurityCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="button" id="submitform"  class="btn btn-primary" >Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

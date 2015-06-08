@@ -1,0 +1,153 @@
+﻿@model ChinaTea.Entities.Order
+@{
+    ViewBag.Title = "Order Details";
+}
+@Html.Action("MyAccountNavBar", new { controller="Nav", area=""})
+<div class="panel col-md-10 text-primary">
+    <div class="panel-heading text-center text-success">
+        <h2>Details of Order: @Model.OrderNumber</h2>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.OrderDate)
+            </dd>
+        </dl>
+    </div>
+            <div class="panel col-md-10 col-md-offset-1">
+                <div class="panel-heading text-parimary">
+                    <h3>Items Ordered:</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Item</th>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>@item.Product.CatalogNumber</td>
+                                <td>@item.Product.ProductName</td>
+                                <td>@item.Quantities</td>
+                                <td>$@item.Product.ProductUnitPrice</td>
+                                <td>$@(item.Quantities * item.Product.ProductUnitPrice)</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="4" class="text-center text-Primary">Grand Total</td>
+                            <td>$@Model.OrderItems.Sum(p => p.Quantities * p.Product.ProductUnitPrice)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="panel-heading text-parimary text-center">
+                    @Html.ActionLink("Edit Items", "EditOrderItems", new { controller = "Manage", area = "", id = Model.Id }, new { @class = "btn btn-primary" });
+                </div>
+            </div>
+            <div class="panel">
+                <div class="col-md-4 col-md-offset-1">
+                    <div class="panel-heading text-center text-Primary">
+                        <h3>Billing Address</h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        <span>@Model.CustomerBillingAddress.FirstName @Model.CustomerBillingAddress.LastName</span><br />
+                        <span>@Model.CustomerBillingAddress.AddressFirstLine</span><br />
+                        @if (Model.CustomerBillingAddress.AddressSecondLine != null)
+                        {
+                            <span>@Model.CustomerBillingAddress.AddressSecondLine</span><br />
+                        }
+                        <span>@Model.CustomerBillingAddress.AddressCity @Model.CustomerBillingAddress.AddressState @Model.CustomerBillingAddress.AddressZipCode</span><br />
+                        <span>@Model.CustomerBillingAddress.AddressCountry</span><br />
+                    </div>
+                    @if (Model.OrderStatus == "Received")
+                    {
+                        <div class="panel-heading text-center text-Primary">
+                            @Html.ActionLink("Edit", "EditOrderBillingAddress", new { controller = "Manage", area = "", id = Model.Id }, new { @class = "btn btn-primary btn-xs" })
+                        </div>
+                    }
+                </div>
+                <div class="col-md-4 col-md-offset-1">
+                    <div class="panel-heading text-center text-Primary">
+                        <h3>Shipping Address</h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        <span>@Model.CustomerShippingAddress.FirstName @Model.CustomerShippingAddress.LastName</span><br />
+                        <span>@Model.CustomerShippingAddress.AddressFirstLine</span><br />
+                        @if (Model.CustomerShippingAddress.AddressSecondLine != null)
+                        {
+                            <span>@Model.CustomerShippingAddress.AddressSecondLine</span><br />
+                        }
+                        <span>@Model.CustomerShippingAddress.AddressCity @Model.CustomerShippingAddress.AddressState @Model.CustomerShippingAddress.AddressZipCode</span><br />
+                        <span>@Model.CustomerShippingAddress.AddressCountry</span><br />
+                    </div>
+                    @if (Model.OrderStatus == "Received")
+                    {
+                        <div class="panel-heading text-center text-Primary">
+                            @Html.ActionLink("Edit", "EditOrderShippingAddress", new { controller = "Manage", area = "", id = Model.Id }, new { @class = "btn btn-primary btn-xs" })
+                        </div>
+                    }
+                </div>
+             </div>
+ 
+       <div class="panel col-md-10 col-md-offset-1">
+            <div class="panel-heading">
+                <h3>Payment Information</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().Name)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().CreditCardNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().CreditCardNumber)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().ExpiredDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().ExpiredDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().SecurityCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().SecurityCode)
+                    </dd>
+                </dl>
+            </div>
+           @if (Model.OrderStatus == "Received")
+           {
+            <div class="panel-heading text-center text-Primary">
+                @Html.ActionLink("Edit", "EditOrderPaymentInfo", new { controller = "Manage", area = "", id = Model.Id }, new { @class = "btn btn-primary btn-xs" })
+            </div>
+           }
+
+        </div>
+    
+   
+        @Html.ActionLink("Back to Order History", "OrderHistory", new { controller = "Manage", area = "" }, new { @class="btn btn-primary"})
+        @if (Model.OrderStatus == "Received")
+        {
+           
+            @Html.ActionLink("Edit Order", "EditOrder", new { controller = "Manage", area = "", id = @Model.Id }, new { @class="btn btn-primary"})
+
+        }
+  
+    </div>

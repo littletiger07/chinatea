@@ -1,0 +1,71 @@
+﻿@model IEnumerable<ChinaTea.Entities.Order>
+
+@{
+    ViewBag.Title = "OrderHistory";
+}
+<script>
+    $(document).ready(function () {
+        $('.cancelorder').bind("click",function () {
+
+            if (!confirm("Are you sure you want to cancel this order?"))
+            { return false; }
+            else
+            {
+                $(this).closest('form').submit();
+            }
+        })
+    })
+
+    
+    
+
+
+</script>
+<h2>OrderHistory</h2>
+@Html.Action("MyAccountNavBar", new { controller="Nav",area="",currentTab="OrderHistory"})
+<div class="col-md-10">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderStatus)
+            </th>
+            <th></th>
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderStatus)
+                </td>
+
+
+                <td>
+                    @using (Html.BeginForm("CancelOrder", "Manage", new { area = "" }, FormMethod.Post))
+                    {
+                        @Html.ActionLink("Details", "OrderDetails", new { id = item.Id })
+                        if (item.OrderStatus == "Received")
+                        {
+                            @Html.Hidden("id", item.Id)
+                            <input type="button" value="Cancel" class="btn btn-danger btn-xs cancelorder" />
+                        }
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

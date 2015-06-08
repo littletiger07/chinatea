@@ -1,0 +1,63 @@
+﻿@model IEnumerable<ChinaTea.Entities.Product>
+@{
+    ViewBag.Title = "Index";
+    }
+<script>
+  $(document).ready(function(){
+      $('#myCarousel').carousel({
+          interval: 4000
+  }
+);
+      $('#myCarousel').carousel('cycle');
+  
+  });
+</script>
+<div><img src="~/img/welcome.gif" /></div>
+<div id="myCarousel" class="carousel slide panel" data-ride="carousel">
+    
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+       
+
+
+    </ol>
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="~/img/tea1.jpg" alt="ChinaTea" class="img-responsive" />
+        </div>
+        <div class="item">
+            <img src="~/img/tea2.jpg" alt="ChinaTea" class="img-responsive" />
+        </div>
+        <div class="item">
+            <img src="~/img/tea3.jpg" alt="ChinaTea" class="img-responsive" />
+        </div>
+        <div class="item">
+            <img src="~/img/tea4.jpg" alt="ChinaTea" class="img-responsive" />
+        </div>
+       
+        
+
+    </div>
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+        <span class="icon-prev"></span>
+    </a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">
+        <span class="icon-next"></span>
+    </a>
+</div>
+<div class="panel">
+    <div class="panel-heading text-primary"><h2>Selected Products</h2></div>
+    <div class="panel-body text-primary">
+    @foreach(var product in Model)
+    {
+        <div class="col-md-3 col-sm-4 text-primary">
+            <a href="/home/productdetails/@product.Id"><img src="@product.PicPathThumbnail" height="200" width="200"></a>
+            <div class="panel-heading"><label class="control-label text-center">@product.ProductName</label></div>
+        </div>
+    }
+    </div>
+    @Html.ActionLink("Show All Products", "ShowProducts", new { controller = "Home", area = "" }, new { @class="btn btn-success pull-right"})
+</div>

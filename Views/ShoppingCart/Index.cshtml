@@ -1,0 +1,94 @@
+﻿@model ChinaTea.Models.ShoppingCartViewModel
+@using ChinaTea.Models
+@using ChinaTea.Extensions
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<script>
+
+    function ConfirmRemoveForm() {
+        if (!confirm("Are you sure you want to remove this product from the cart?"))
+            return false;
+    }
+
+    function ConfirmClearForm() {
+        if (!confirm("Are you sure you want to empty the cart?"))
+            return false;
+    }
+</script>
+
+
+
+  
+
+@if(Model.CartItems.Count==0)
+{
+    <div class="panel-heading text-center text-danger">Your Cart Is Empty!</div>
+    <a class="btn btn-primary" href=@ViewBag.ReturnUrl>Continue Shopping</a>
+}
+else
+{
+    <div class="panel-bocy">
+        @using (Html.BeginForm("UpdateCart", "shoppingcart", new { area=""}))
+        {
+        <table class="table table-striped">
+            <tr class="text-success">
+                <th>Product Name</th>
+                <th>Price (Each)</th>
+                <th>Quantity</th>
+                <th>Update Quantity</th>
+                <th class="text-danger">Delete</th>
+            </tr>
+
+            @for (int i = 0; i < Model.CartItems.Count(); i++)
+            {
+                <tr class="text-primary">
+
+                    <td>@Html.ActionLink(@Model.CartItems[i].Product.ProductName, "ProductDetails", "Home", new { id = Model.CartItems[i].Product.Id }, null)</td>
+                    <td>$@Model.CartItems[i].Product.ProductUnitPrice</td>
+                    <td>@Model.CartItems[i].Count</td>
+                    <td>@Html.Hidden("editcartitems[" + @i + "].RecordId", Model.CartItems[i].RecordId) @Html.SelectQuantities("editcartitems[" + @i + "].quantity", Model.CartItems[i].Count<10?20:Model.CartItems[i].Count*2, Model.CartItems[i].Count)</td>
+                    <td>
+
+                    
+                    <input type="checkbox" name="itemsToBeDeleted" value="@Model.CartItems[i].RecordId" />
+                    </td>
+
+                   
+                </tr>
+            }
+
+            <tr class="text-success">
+                <td>Total</td>
+                <td></td>
+                <td></td>
+                <td id="cart-total">$@Model.CartTotal</td>
+            </tr>
+
+        </table>
+
+
+
+
+
+        <div >
+            @Html.ActionLink("Empty the cart", "EmptyCart", "ShoppingCart", new { @class = "btn btn-danger btn-xs pull-right", @onclick = "return ConfirmClearForm()" })
+            <button type="submit" class="btn btn-primary btn-xs pull-right">Update Cart</button>
+        </div>
+
+        }
+    </div>
+    <br/>
+    <br/>
+    <div>
+        <a class="btn btn-primary" href=@ViewBag.ReturnUrl>Continue Shopping</a>
+        @Html.ActionLink("Checkout", "CheckoutStep1", new { controller = "ShoppingCart", area = "" }, new { @class="btn btn-primary btn-danger"})
+    </div>
+}
+

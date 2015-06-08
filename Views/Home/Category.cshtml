@@ -1,0 +1,32 @@
+﻿@model ChinaTea.Entities.ProductCategory
+
+@{
+    ViewBag.Title = "Category";
+    Random rand=new Random();
+    int index=rand.Next(0,Model.Products.Count());
+    ChinaTea.Entities.Product product= Model.Products.ElementAt(index);
+}
+
+
+<div>
+    @Html.Action("ProductCategoryNavBar", "Nav", new { currentCategory = ViewBag.currentCategory })
+    <div class="col-md-9 col-sm-9">
+        <h2 class="text-success">@Model.ProductCategoryName</h2>
+        <div class="col-md-4 text-center">
+            <img class="img-responsive" src="@product.PicPathDeatil" alt="@product.ProductName" />
+            <label class="text-success">@product.ProductName</label>
+        </div>
+        <br />
+        <div class="panel-heading col-md-12">
+            <p class="text-primary">
+                @Model.ProductCategoryDescription
+            </p>
+
+
+        </div>
+    </div>
+    <p>
+        @Html.ActionLink("Show Products", "ShowProducts", new { cotnroller = "home", area = "", categories = Model.Id }, new { @class = "btn btn-success pull-right" })
+
+    </p>
+</div>

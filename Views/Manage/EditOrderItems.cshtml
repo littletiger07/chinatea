@@ -1,0 +1,117 @@
+﻿@using ChinaTea.Extensions
+@model ChinaTea.Areas.Admin.Models.EditItemsViewModel
+@{
+
+    ViewBag.Title = "Edit Order Items";
+}
+<script>
+    function checkform() {
+        var selects = $('#OrderItems select');
+
+        for(i=0;i<selects.length;i++)
+        {
+
+            if (!selects[i].value)
+                return false;
+        }
+        return true;
+    };
+    function serialize() {
+        var allRows = $('#OrderItems tr');
+        for (var i = 2; i <= allRows.length; i++) {
+            $('#OrderItems tr:nth-of-type(' + i + ') input:nth-of-type(1)').attr('name', 'updatedItems[' + (i - 2) + '].Id');
+            $('#OrderItems tr:nth-of-type(' + i + ') input:nth-of-type(2)').attr('name', 'updatedItems[' + (i - 2) + '].OrderId');
+            $('#OrderItems tr:nth-of-type(' + i + ') td:nth-of-type(1) select').attr('name', 'updatedItems[' + (i - 2) + '].ProductId');
+            $('#OrderItems tr:nth-of-type(' + i + ') td:nth-of-type(2) select').attr('name', 'updatedItems[' + (i - 2) + '].Quantities');
+
+
+        };
+    }
+    function createNewItem() {
+        var tr = $('<tr>').append($('<input>',{type:'hidden', name:"id",value:"0"})).append($('<input>',{type:'hidden', name:"orderId",value: '@Model.OrderItems.ElementAt(0).OrderId'}));
+        var td1 = $('<td>').html('@Html.ReplaceNewLines(Html.DropDownList("ProductId", new SelectList(Model.Products, "Key", "Value"),"Select product"))');
+        var td2 = $('<td>').html('@Html.ReplaceNewLines(Html.SelectQuantities("Quantities", 20))')
+        var deleteButton = $('<button>', { type: 'button', "class": 'btn btn-danger btn-xs deleteitem' }).html('Delete');
+        deleteButton.bind("click", function () {
+            var itemCount = $('#OrderItems tr').length - 1;
+            if (itemCount > 1) {
+                $(this).closest('tr').remove();
+                serialize();
+            }
+            else {
+                alert("Form cannot be empty!");
+                return;
+            }
+        });
+        var td3 = $('<td>').append(deleteButton);
+        return tr.append(td1).append(td2).append(td3);
+    }
+
+    $(document).ready(function () {
+        $(".deleteitem").bind("click", function () {
+            var itemCount = $('#OrderItems tr').length - 1;
+            if (itemCount > 1) {
+                $(this).closest('tr').remove();
+                serialize();
+            }
+            else {
+                alert("Form cannot be empty!");
+                return;
+            }
+
+        });
+        $('#submitform').click(function () {
+            if(checkform())
+            {
+                $('#orderItems').submit();
+            }
+            else {
+                alert('Error! Empty entry!');
+                return false;
+            }
+        })
+        $('#additem').click(function () {
+            @*var newRow = '<tr>@Html.ReplaceNewLines(Html.Hidden("temp"))@Html.ReplaceNewLines(Html.Hidden("temp",Model.OrderItems.ElementAt(0).OrderId))<td>@Html.ReplaceNewLines(Html.DropDownList("ProductId", new SelectList(Model.Products, "Key", "Value")))</td><td>@Html.ReplaceNewLines(Html.SelectQuantities("Quantities", 20))</td><td><button type="button" class="btn btn-danger btn-xs deleteitem">Delete</button></td></tr>';*@
+
+            $('#OrderItems tr').last().after(createNewItem());
+
+            serialize();
+        });
+    })
+</script>
+<div class="panel">
+    <div class="panel-heading text-center text-primary">
+        <h3>Items Ordered</h3>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="panel-heading text-danger">
+                @Html.ValidationSummary(false)
+            </div>
+            <table class="table table-striped" id="OrderItems">
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th></th>
+                </tr>
+                @for (int i = 0; i < Model.OrderItems.Count(); i++)
+                {
+                    string name = "updatedItems[" + i + "]";
+                    <tr>
+                        @Html.Hidden(name + ".Id", Model.OrderItems.ElementAt(i).Id)
+                        @Html.Hidden(name + ".OrderId", Model.OrderItems.ElementAt(i).OrderId)
+                        <td>@Html.DropDownList(name + ".ProductId", new SelectList(Model.Products, "Key", "Value", Model.OrderItems.ElementAt(i).ProductId))</td>
+                        <td>@Html.SelectQuantities(name + ".Quantities", 20, Model.OrderItems.ElementAt(i).Quantities)</td>
+                        <td><button type="button" class="btn btn-danger btn-xs deleteitem">Delete</button></td>
+                    </tr>
+
+                }
+            </table>
+
+            <input type="submit" id="submitform" value="Save" class="btn btn-primary" />
+        }
+        <button class="btn btn-default" id="additem">Add Item</button>
+    </div>
+</div>

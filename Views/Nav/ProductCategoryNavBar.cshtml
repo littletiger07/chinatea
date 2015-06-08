@@ -1,0 +1,10 @@
+﻿@model IEnumerable<ChinaTea.Entities.ProductCategory>
+
+<ul class="nav nav-pills nav-stacked col-md-3 col-sm-3" >
+    <li class="text-success @(ViewBag.currentCategory==0?"active":"")">@Html.ActionLink("Chinese Tea", "Home", new{controller="Home",area=""})</li>
+    <li role="presentation" class="divider"></li>
+    @foreach(var category in Model)
+    {
+        <li class="text-success @(ViewBag.currentCategory==category.Id?"active":"")">@Html.ActionLink(category.ProductCategoryName, "Category", new { controller="Home",area="",id=category.Id})</li>
+    }
+</ul>
