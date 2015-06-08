@@ -1,0 +1,102 @@
+﻿@model ChinaTea.Entities.Product
+
+@{
+    ViewBag.Title = "ShowDetails";
+}
+
+<h2>ShowDetails</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CatalogNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CatalogNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductCategoryId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductCategoryId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductPackageSize)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductPackageSize)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PackageUnit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PackageUnit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductUnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductUnitPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stock)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PicPathThumbnail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PicPathThumbnail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PicPathDeatil)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PicPathDeatil)
+        </dd>
+        <dd>
+            <img src="@Url.Content(Model.PicPathDeatil)" alt="@Model.ProductName"  />
+        </dd>
+
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "EditProduct", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

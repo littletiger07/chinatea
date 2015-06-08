@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ChinaTea.Entities.Order>
+
+@{
+    ViewBag.Title = "ShowOrders";
+}
+<script>
+    $(document).ready(function () {
+        $('.cancelOrder').bind("click", function () {
+            if (!confirm("Do you want to CANCEL this order?")) {
+                return false;
+            }
+            else {
+                $(this).closest('form').submit();
+            }
+        });
+        $('.deleteOrder').bind("click", function () {
+            if (!confirm("Do you want to DELETE this order?")) {
+                return false;
+            }
+            else {
+                $(this).closest('form').submit();
+            }
+        });
+    })
+</script>
+<h2>Show Orders</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderStatus)
+        </th>
+
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderStatus)
+        </td>
+     
+     
+        <td>
+            @using (Html.BeginForm("Cancel", "Order", new { area="admin"}, FormMethod.Post))
+            {
+                <input type="hidden" name="id" value="@item.Id" />
+               
+                @Html.ActionLink("Details", "ShowOrderDetail", new { id=item.Id }, new{@class="btn btn-primary btn-xs"}) 
+                    @:|
+                <button type="button" value="Cancel" class="btn btn-danger btn-xs cancelOrder" disabled="@(item.OrderStatus!="Received")" >Cancel</button>
+                
+            } 
+            @using (Html.BeginForm("Delete", "Order", new { area = "admin" }, FormMethod.Post))
+            {
+                <input type="hidden" name="id" value="@item.Id" />
+                <button type="button" class="btn btn-danger btn-xs deleteOrder" disabled="@(item.OrderStatus!="Cancelled")">Delete</button>
+            }  
+        </td>
+    </tr>
+}
+
+</table>

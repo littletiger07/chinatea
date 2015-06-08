@@ -1,0 +1,188 @@
+﻿@model ChinaTea.Entities.Order
+@{
+    ViewBag.Title = "OrderDetail";
+}
+<script>
+    $(document).ready(function () {
+        $('#cancel').bind("click", function () {
+            if (!confirm("Do you want to CANCEL this order?")) {
+                return false;
+            }
+            else {
+                $(this).closest('form').submit();
+            }
+        });
+        $('#delete').bind("click", function () {
+            if (!confirm("Do you want to DELETE this order?")) {
+                return false;
+            }
+            else {
+                $(this).closest('form').submit();
+            }
+        });
+    })
+</script>
+<h2>OrderDetail</h2>
+
+<div class="panel col-md-12">
+    <div class="panel-heading text-center text-Primary">
+        <h2>Details of Order: @Model.OrderNumber</h2>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <tr>
+                <th>User Name</th>
+                <th>Order Number</th>
+                <th>Order Date</th>
+                <th>Order Status</th>
+                <th>Invoice Number</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>@Html.DisplayFor(o=>o.UserName)</td>
+                <td>@Html.DisplayFor(o=>o.OrderNumber)</td>
+                <td>@Html.DisplayFor(o=>o.OrderDate)</td>
+                <td>@Html.DisplayFor(o=>o.OrderStatus)</td>
+                <td>@Html.DisplayFor(o=>o.InvoiceNumber)</td>
+                <td>@Html.ActionLink("Edit", "EditOrderInfo", new { controller = "order", area = "admin", id=Model.Id }, new { @class="btn btn-primary btn-xs"})</td>
+            </tr>
+        </table>
+    </div>
+    <div class="panel col-md-10 col-md-offset-1">
+        <div class="panel-heading text-parimary">
+            <h3>Items Ordered:</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <tr>
+                    <th>Item</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+                @foreach (var item in Model.OrderItems)
+                {
+                    <tr>
+                        <td>@item.Product.CatalogNumber</td>
+                        <td>@item.Product.ProductName</td>
+                        <td>@item.Quantities</td>
+                        <td>@item.Product.ProductUnitPrice</td>
+                        <td>@(item.Quantities * item.Product.ProductUnitPrice)</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="4" class="text-center text-Primary">Grand Total</td>
+                    <td>@Model.OrderItems.Sum(p => p.Quantities * p.Product.ProductUnitPrice)</td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-heading text-parimary text-center">
+            @Html.ActionLink("Edit Items", "EditItems",new { controller = "order", area = "admin", id = Model.Id }, new {@class="btn btn-primary btn-xs"});
+        </div>
+    </div>
+    <div class="panel">
+        <div class="col-md-4 col-md-offset-1">
+            <div class="panel-heading text-center text-Primary">
+                <h3>Billing Address</h3>
+            </div>
+            <div class="panel-body text-center">
+                <span>@Model.CustomerBillingAddress.FirstName @Model.CustomerBillingAddress.LastName</span><br />
+                <span>@Model.CustomerBillingAddress.AddressFirstLine</span><br />
+                @if (Model.CustomerBillingAddress.AddressSecondLine != null)
+                {
+                    <span>@Model.CustomerBillingAddress.AddressSecondLine</span><br />
+                }
+                <span>@Model.CustomerBillingAddress.AddressCity @Model.CustomerBillingAddress.AddressState @Model.CustomerBillingAddress.AddressZipCode</span><br />
+                <span>@Model.CustomerBillingAddress.AddressCountry</span><br />
+            </div>
+            <div class="panel-heading text-center text-Primary">
+                @Html.ActionLink("Edit", "EditBillingAddress", new { controller = "order", area = "admin", id = Model.Id }, new { @class="btn btn-primary btn-xs"})
+            </div>
+        </div>
+        <div class="col-md-4 col-md-offset-1">
+            <div class="panel-heading text-center text-Primary">
+                <h3>Shipping Address</h3>
+            </div>
+            <div class="panel-body text-center">
+                <span>@Model.CustomerShippingAddress.FirstName @Model.CustomerShippingAddress.LastName</span><br />
+                <span>@Model.CustomerShippingAddress.AddressFirstLine</span><br />
+                @if (Model.CustomerShippingAddress.AddressSecondLine != null)
+                {
+                    <span>@Model.CustomerShippingAddress.AddressSecondLine</span><br />
+                }
+                <span>@Model.CustomerShippingAddress.AddressCity @Model.CustomerShippingAddress.AddressState @Model.CustomerShippingAddress.AddressZipCode</span><br />
+                <span>@Model.CustomerShippingAddress.AddressCountry</span><br />
+            </div>
+            <div class="panel-heading text-center text-Primary">
+                @Html.ActionLink("Edit", "EditShippingAddress", new { controller = "order", area = "admin", id = Model.Id }, new { @class = "btn btn-primary btn-xs" })
+            </div>
+        </div>
+        <div class="panel col-md-10 col-md-offset-1">
+            <div class="panel-heading">
+                <h3>Payment Information</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().Name)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().CreditCardNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().CreditCardNumber)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().ExpiredDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().ExpiredDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.PaymentInfoes.First().SecurityCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.PaymentInfoes.First().SecurityCode)
+                    </dd>
+                </dl>
+            </div>
+            <div class="panel-heading text-center text-Primary">
+                @Html.ActionLink("Edit", "EditPaymentInfo", new { controller = "order", area = "admin", id = Model.Id }, new { @class = "btn btn-primary btn-xs" })
+            </div>
+        </div>
+    </div>
+  
+</div>
+<div class="panel">
+    <div class="col-md-3">
+        @Html.ActionLink("Back to List", "Index", new { controller = "order", area = "admin" }, new { @class = "btn btn-success" })
+    </div>
+    @if (Model.OrderStatus == "Received")
+    {
+        <div class="col-md-3">
+            @using (Html.BeginForm("Cancel", "Order", new { area = "admin" }, FormMethod.Post))
+            {
+                @Html.Hidden("id", Model.Id)
+                <button type="button" class="btn btn-danger" id="cancel">Cancel Order</button>
+            }
+        </div>
+    }
+    @if (Model.OrderStatus == "Cancelled")
+    {
+        <div class="col-md-3">
+            @using (Html.BeginForm("Delete", "Order", new { area = "admin" }, FormMethod.Post))
+            {
+                @Html.Hidden("id", Model.Id)
+                <button type="button" class="btn btn-danger" id="delete">Delete Order</button>
+            }
+        </div>
+    }
+</div>
